@@ -1,0 +1,1 @@
+exports.UserDTO = require('./user');
