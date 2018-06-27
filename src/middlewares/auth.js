@@ -10,8 +10,8 @@ async function authMiddleware(ctx, next) {
   if (ctx.request.header.authorization) {
     const token = ctx.request.header.authorization
     try {
-      userFormJwt = await jwt.verify(token, process.env.JWT_SECRET);
-      ctx.user = await User.findOne({username: userFormJwt.username});
+      const userFromJwt = await jwt.verify(token, process.env.JWT_SECRET);
+      ctx.user = await User.findOne({username: userFromJwt.username});
       ctx.isAuthenticated = true;
       await next();
     } catch(e) {
