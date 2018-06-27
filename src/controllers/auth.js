@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { UserDTO } = require('../common/dtos');
 const Response = require('../common/response');
@@ -11,9 +12,13 @@ exports.login = async (ctx) => {
 
   if (user) {
     if (user.checkPassword(password)) {
+      const userDTO = new UserDTO(user);
       ctx.body = new Response({
         success: true,
-        payload: new UserDTO(user)
+        payload: {
+          user: userDTO,
+          token: jwt.sign(userDTO.toJSON(), process.env.JWT_SECRET),
+        }
       });
     } else {
       ctx.body = new Response({
