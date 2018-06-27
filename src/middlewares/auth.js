@@ -10,6 +10,7 @@ async function authMiddleware(ctx, next) {
       await jwt.verify(token, process.env.JWT_SECRET);
       await next();
     } catch(e) {
+      ctx.status = 400;
       ctx.body = new Response({
         success: false,
         errorCode: errorCodes.invlaidToken,
